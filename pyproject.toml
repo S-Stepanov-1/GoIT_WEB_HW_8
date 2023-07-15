@@ -10,6 +10,8 @@ packages = [{include = "goit_web_hw_8"}]
 python = "^3.11"
 pymongo = "^4.4.1"
 mongoengine = "^0.27.0"
+redis = "^4.6.0"
+redis-lru = "^0.1.2"
 
 
 [build-system]

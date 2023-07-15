@@ -1,9 +1,17 @@
 import sys
+import redis
+from redis_lru import RedisLRU
 
 from connect import create_connect
 from models import Authors, Quotes
 
 
+#  connect to Redis local server
+client = redis.StrictRedis(host="localhost", port=6379, password=None)
+cache = RedisLRU(client)
+
+
+@cache
 def do_name_query(query_author):
     author = Authors.objects.get(fullname__istartswith=query_author)
 
@@ -17,6 +25,7 @@ def do_name_query(query_author):
         print("There are no quotes by this author.")
 
 
+@cache
 def do_tag_query(query_tag):
     query_tag_list = query_tag.split(",")
 
