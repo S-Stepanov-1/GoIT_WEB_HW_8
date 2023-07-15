@@ -18,18 +18,15 @@ def do_name_query(query_author):
 
 
 def do_tag_query(query_tag):
-    all_quotes = Quotes.objects()
+    query_tag_list = query_tag.split(",")
 
-    if all_quotes:
+    matching_quotes = Quotes.objects(tags__in=query_tag_list)
+    if matching_quotes:
 
-        for quote in all_quotes:
-            if query_tag in quote.tags:
-                print(f"Quote by {quote.author.fullname}")
-                print(quote.quote + "\n")
-
-
-def do_many_tags_query(query_tags):
-    pass
+        for quote in matching_quotes:
+            print(f"Quote by {quote.author.fullname}\nTag(s):", end=" ")
+            [print(tag, end=" ") for tag in quote.tags if tag in query_tag_list]
+            print(f"\n{quote.quote}\n")
 
 
 def main():
@@ -42,12 +39,10 @@ def main():
                 sys.exit()
             case "name":
                 do_name_query(query[1])
-            case "tag":
-                do_tag_query(query[1])
-            case "tags":
-                do_many_tags_query(query[1:])
+            case "tag" | "tags":
+                do_tag_query("".join(query[1]))  # query is str again
             case _:
-                print("\nUnknown command. Please, try again.\n")
+                print(f"\n[{query[0]}] Unknown command. Please, try again.\n")
 
 
 if __name__ == '__main__':
