@@ -5,11 +5,11 @@ from models import Authors, Quotes
 
 
 def do_name_query(query_author):
-    author = Authors.objects.get(fullname=query_author).id
+    author = Authors.objects.get(fullname__istartswith=query_author)
 
     quotes = Quotes.objects(author=author)
     if quotes:
-        print(f"Quotes by {query_author}:")
+        print(f"Quotes by {author.fullname}:")
         for quote in quotes:
             print(quote.quote)
         print()

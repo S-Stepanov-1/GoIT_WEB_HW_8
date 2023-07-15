@@ -34,7 +34,7 @@ if __name__ == '__main__':
     create_connect()  # connection to DB
 
     authors = get_data("authors.json")  # authors as a list of dictionaries
-    quotes = get_data("qoutes.json")  # quotes as a list of dictionaries
+    quotes = get_data("quotes.json")  # quotes as a list of dictionaries
 
     fill_authors(authors)
     fill_quotes(quotes)
