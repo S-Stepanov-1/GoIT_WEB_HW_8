@@ -18,4 +18,6 @@ connect(db=db_name,
 class MyContacts(Document):
     fullname = StringField(max_length=30, required=True)
     email = StringField(max_length=40, required=True)
+    message = StringField(required=True)
+    preferred_sending = StringField(required=True)  # SMS or Email
     is_received = BooleanField(default=False)
