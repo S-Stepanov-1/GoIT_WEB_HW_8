@@ -1,7 +1,5 @@
 import pika
-import configparser
 from faker import Faker
-from mongoengine import connect
 
 from models import MyContacts
 
@@ -18,19 +16,6 @@ channel.queue_declare(queue='Email', durable=True)
 channel.queue_bind(exchange='Message Handler', queue='Email')  # bind queue and exchange
 
 
-def connect_to_db():
-    config = configparser.ConfigParser()
-    config.read("../Part 1/config.ini")
-
-    mongo_user = config.get('DB', 'user')
-    mongodb_pass = config.get('DB', 'pass')
-    db_name = "hw08_part2"
-
-    connect(db=db_name,
-            host=f"mongodb+srv://{mongo_user}:{mongodb_pass}@stepanovdb.codnmzv.mongodb.net/?retryWrites=true&w=majority",
-            ssl=True)
-
-
 def put_into_queue(contact):
     channel.basic_publish(exchange="Message Handler", routing_key="Email", body=str(contact).encode(),
                           properties=pika.BasicProperties(delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE))
@@ -39,7 +24,7 @@ def put_into_queue(contact):
 def generate_contacts():
     fake = Faker()
 
-    # generate and save 100 contacts
+    # generate 100 contacts and save them to DB
     for _ in range(100):
         new_contact = MyContacts(fullname=fake.name(), email=fake.email())
         new_contact.save()
@@ -50,7 +35,6 @@ def generate_contacts():
 
 
 def main():
-    connect_to_db()
     generate_contacts()
 
 
