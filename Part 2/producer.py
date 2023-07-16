@@ -34,7 +34,7 @@ def generate_contacts():
     fake = Faker()
 
     # generate 100 contacts and save them to DB
-    for _ in range(10):
+    for _ in range(150):
         new_contact = MyContacts(fullname=fake.name(), email=fake.email(), message=fake.text(),
                                  preferred_sending=random.choice(["Email", "SMS"]))
         new_contact.save()
